@@ -11,7 +11,7 @@ export const getScoresAPIData = async (date: string): Promise<IAPIScoreResults> 
         axios.get(apiCall)
         .then( (json) => {
             console.log("raw: ", json);
-            if (json.data.dates && json.data.dates.length == 1){
+            if (json.data.dates && json.data.dates.length === 1){
                 console.log("in here")
                 var games: IAPIGameScore[] = [];
                 json.data.dates[0].games.forEach( (game : any) => {
@@ -20,12 +20,16 @@ export const getScoresAPIData = async (date: string): Promise<IAPIScoreResults> 
                     const awayTeamID = game.teams.away.team.id;
                     const awayTeamScore = game.teams.away.score;
                     const homeTeamScore = game.teams.home.score;
+                    const homeTeamName = game.teams.home.team.name;
+                    const awayTeamName = game.teams.away.team.name;
                     const gameData: IAPIGameScore = {
                         gamePk: gamePk,
                         homeTeamID: homeTeamID,
                         homeTeamScore: homeTeamScore,
                         awayTeamID: awayTeamID,
-                        awayTeamScore: awayTeamScore
+                        awayTeamScore: awayTeamScore,
+                        homeTeamName: homeTeamName,
+                        awayTeamName: awayTeamName
                     }
                     games.push(gameData);
                 });
@@ -46,7 +50,7 @@ export const getScoresAPIData = async (date: string): Promise<IAPIScoreResults> 
     })   
 }
 
-export const getGameAPIData = async (gamePK: number) => {
+export const getGameAPIData = async (gamePK: number): Promise<IAPIGameDetails> => {
     return new Promise( (resolve, reject) => {
         const apiCall = `https://statsapi.web.nhl.com/api/v1/game/${gamePK}/feed/live`;
         axios.get(apiCall)
@@ -60,6 +64,13 @@ export const getGameAPIData = async (gamePK: number) => {
 
             const spStartIndex = periodPlays[1].startIndex;
             const spEndIndex = periodPlays[1].endIndex;
+
+            const homeID = json.data.gameData.teams.home.id;
+            const awayID = json.data.gameData.teams.away.id;
+            var missedShots: any = {};
+            missedShots.home = 0;
+            missedShots.away = 0;
+
 
             var plays: IPlay[] = [];
             json.data.liveData.plays.allPlays.forEach( (play: any) => {
@@ -104,13 +115,24 @@ export const getGameAPIData = async (gamePK: number) => {
                         eventTypeID : eventTypeID,
                         players: players
                     }
+
+                    //add to missed shots count
+                    if (iPlay.eventTypeID === 'MISSED_SHOT'){
+                        if (iPlay.teamID === homeID ) {
+                            missedShots.home += 1;
+                        }
+                        else {
+                            missedShots.away += 1;
+                        }
+                    }
+
                     plays.push(iPlay);
                 }
             });
 
             //get homeStats
             const homeStatsRaw = json.data.liveData.boxscore.teams.home.teamStats.teamSkaterStats;
-            const homeID = json.data.gameData.teams.home.id;
+
             const homeGoals = homeStatsRaw.goals;
             const homeBlocks = homeStatsRaw.blocked;
             const homeShots = homeStatsRaw.shots;
@@ -125,7 +147,8 @@ export const getGameAPIData = async (gamePK: number) => {
                 const goalie: IGoalie = {
                     id: goalieRaw.person.id,
                     saves: goalieRaw.stats.goalieStats.saves,
-                    shots: goalieRaw.stats.goalieStats.shots
+                    shots: goalieRaw.stats.goalieStats.shots,
+                    savePercentage: goalieRaw.stats.goalieStats.savePercentage
                 }
                 homeGoalies.push(goalie);
             });
@@ -136,13 +159,14 @@ export const getGameAPIData = async (gamePK: number) => {
                 goals: homeGoals,
                 shots : homeShots,
                 blocks : homeBlocks,
-                goalies : homeGoalies
+                goalies : homeGoalies,
+                missed : missedShots.home
             }
 
 
             //get awayStats
             const awayStatsRaw = json.data.liveData.boxscore.teams.away.teamStats.teamSkaterStats;
-            const awayID = json.data.gameData.teams.away.id;
+
             const awayGoals = awayStatsRaw.goals;
             const awayBlocks = awayStatsRaw.blocked;
             const awayShots = awayStatsRaw.shots;
@@ -158,7 +182,8 @@ export const getGameAPIData = async (gamePK: number) => {
                 const goalie: IGoalie = {
                     id: goalieRaw.person.id,
                     saves: goalieRaw.stats.goalieStats.saves,
-                    shots: goalieRaw.stats.goalieStats.shots
+                    shots: goalieRaw.stats.goalieStats.shots,
+                    savePercentage: goalieRaw.stats.goalieStats.savePercentage
                 }
                 awayGoalies.push(goalie);
             });
@@ -169,10 +194,11 @@ export const getGameAPIData = async (gamePK: number) => {
                 goals: awayGoals,
                 shots: awayShots,
                 blocks: awayBlocks,
-                goalies : awayGoalies
+                goalies : awayGoalies,
+                missed : missedShots.away
             }
 
-            var details: IAPIGameDetails = {
+            const details: IAPIGameDetails = {
                 gamePK: gamePK,
                 scoringPlays: scoringPlays,
                 periodPlays: periodPlays,
@@ -184,7 +210,7 @@ export const getGameAPIData = async (gamePK: number) => {
             // console.log("details before: " , details);
             // details = prepCoordinates(details);
             console.log("details: " , details);
-                return resolve(null);
+            return resolve(details);
         })
         .catch( () => {
             return reject(null);
@@ -192,19 +218,19 @@ export const getGameAPIData = async (gamePK: number) => {
     }) 
 }
 
-const prepCoordinates = (data: IAPIGameDetails): IAPIGameDetails => {
-    //flip the x and y coordinates of all events in the 2nd period
-    const spStart = data.periodPlays[1].startIndex;
-    const spEnd = data.periodPlays[1].endIndex;
-    for (let i = 0 ; i< data.allPlays.length ; i++ ){
-        if( spStart <= data.allPlays[i].eventIDx && data.allPlays[i].eventIDx <= spEnd ){
-            console.log("data before: ", data.allPlays[i]);
-            data.allPlays[i].coordinates.x = -data.allPlays[i].coordinates.x;
-            data.allPlays[i].coordinates.y = -data.allPlays[i].coordinates.y;
-            console.log("data after: " , data.allPlays[i]);
-        }
-    }
-    return data;
-}
+// const prepCoordinates = (data: IAPIGameDetails): IAPIGameDetails => {
+//     //flip the x and y coordinates of all events in the 2nd period
+//     const spStart = data.periodPlays[1].startIndex;
+//     const spEnd = data.periodPlays[1].endIndex;
+//     for (let i = 0 ; i< data.allPlays.length ; i++ ){
+//         if( spStart <= data.allPlays[i].eventIDx && data.allPlays[i].eventIDx <= spEnd ){
+//             console.log("data before: ", data.allPlays[i]);
+//             data.allPlays[i].coordinates.x = -data.allPlays[i].coordinates.x;
+//             data.allPlays[i].coordinates.y = -data.allPlays[i].coordinates.y;
+//             console.log("data after: " , data.allPlays[i]);
+//         }
+//     }
+//     return data;
+// }
 
 export default {getScoresAPIData, getGameAPIData}

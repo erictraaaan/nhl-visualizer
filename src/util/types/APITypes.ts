@@ -7,6 +7,8 @@ export interface IAPIGameScore {
     gamePk: number
     homeTeamID: number
     homeTeamScore: number
+    homeTeamName: string
+    awayTeamName: string
     awayTeamID: number
     awayTeamScore: number
 }
@@ -45,6 +47,7 @@ export interface ITeamStats{
     goals: number
     shots: number
     blocks: number
+    missed: number
     goalies : IGoalie[]
 }
 
@@ -52,4 +55,5 @@ export interface IGoalie {
     id: number
     saves: number
     shots: number
+    savePercentage: number
 }

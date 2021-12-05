@@ -7,7 +7,16 @@ $violet: #b8b8ff;
 .App {
   text-align: center;
   font-family: Georgia, 'Times New Roman', Times, serif;
-  font-style: italic;
+  // font-style: italic;
+  background-color: $beige;
+
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: $black;
 }
 
 .App-logo {
@@ -58,5 +67,51 @@ $violet: #b8b8ff;
   &:hover{
     background-color: $black;
     color: $beige
+  }
+}
+
+
+
+.card {
+	background-color: #fff;
+	border-radius: 4px;
+  min-width: 600px;
+	// max-width: 400px;
+	// margin: 10% auto;
+	// height: 100px;
+	position: relative;
+	padding: 5px;
+  margin: 5px;
+	color: #444;
+	cursor: pointer;
+	&:before {
+		content: '';
+		display: block;
+		position: absolute;
+		background-color: #ccc;
+		left: 20px;
+		right: 20px;
+		bottom: 0;
+		top: 50%;
+		z-index: -1;
+		box-shadow: 0 0 40px lighten(#000, 60%);
+		transition: box-shadow .2s ease-in-out;
+	}
+	&.level-3 {
+		&:hover {
+			&:before {
+				box-shadow: 0 0 80px lighten(#000, 60%);
+			}
+		}
+	}
+	h5 {
+		font-weight: 300;
+		font-size: 20px;
+    margin: 15px;
+	}
+
+  .modal {
+    margin: auto;
+    margin-top: 2rem;
   }
 }
