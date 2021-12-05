@@ -1,5 +1,13 @@
+$beige: #EFE5D5;
+$black: #403d39;
+$blue: #623cea;
+$brown: #bfafa6;
+$violet: #b8b8ff;
+
 .App {
   text-align: center;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-style: italic;
 }
 
 .App-logo {
@@ -14,18 +22,18 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: $beige;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  color: $black;
 }
 
 .App-link {
-  color: #61dafb;
+  color: $blue;
 }
 
 @keyframes App-logo-spin {
@@ -34,5 +42,21 @@
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+.lets-go-btn {
+  background-color: $brown;
+  border: none;
+  color: $black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+
+  &:hover{
+    background-color: $black;
+    color: $beige
   }
 }
