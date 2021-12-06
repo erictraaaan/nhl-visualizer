@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/nhl-visualizer/static/css/main.dcaa152b.chunk.css",
-    "main.js": "/nhl-visualizer/static/js/main.fddbb037.chunk.js",
-    "main.js.map": "/nhl-visualizer/static/js/main.fddbb037.chunk.js.map",
+    "main.js": "/nhl-visualizer/static/js/main.5155fc80.chunk.js",
+    "main.js.map": "/nhl-visualizer/static/js/main.5155fc80.chunk.js.map",
     "runtime-main.js": "/nhl-visualizer/static/js/runtime-main.69337a68.js",
     "runtime-main.js.map": "/nhl-visualizer/static/js/runtime-main.69337a68.js.map",
     "static/js/2.6780e3ff.chunk.js": "/nhl-visualizer/static/js/2.6780e3ff.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.69337a68.js",
     "static/js/2.6780e3ff.chunk.js",
     "static/css/main.dcaa152b.chunk.css",
-    "static/js/main.fddbb037.chunk.js"
+    "static/js/main.5155fc80.chunk.js"
   ]
 }
