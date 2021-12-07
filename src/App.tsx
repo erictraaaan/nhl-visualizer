@@ -5,6 +5,7 @@ import { getCorsiForPercent, getPDO } from './util/AnalyticsUtils';
 import { getGameAPIData, getScoresAPIData }from './util/APIUtils';
 import { IAPIGameDetails, IAPIGameScore, IAPIScoreResults } from './util/types/APITypes';
 import ShotVisualizer from './components/ShotVisualizer/ShotVisualizer';
+import DataTable from './components/DataTable/DataTable';
 
 const App = () => {
 
@@ -76,41 +77,66 @@ const App = () => {
 
     {currentGames && currentGames.games.map( (game, index) => 
     <div key={index} className="card level-3" onClick={() => {
-      setSelectedGameData(game);
-      setSelectedGame(game.gamePk);
-      }}>
+    setSelectedGameData(game);
+    setSelectedGame(game.gamePk);
+    }}>
       <div className="teams">
-
         <div className="team-display">
-        <img alt="away team logo" src={`${IMG_SRC}${game.awayTeamID}.svg`} className="scorebug-logo"></img>
-        <p className='team-name'>{game.awayTeamName}</p>
+          <img alt="away team logo" src={`${IMG_SRC}${game.awayTeamID}.svg`} className="scorebug-logo"></img>
+          <p className='team-name'>{game.awayTeamName}</p>
         </div>
         <div className="score">
-        <p>{game.awayTeamScore} - {game.homeTeamScore} </p>
-      </div>
-        <div className="team-display">
-        <img alt="home team logo" src={`${IMG_SRC}${game.homeTeamID}.svg`} className="scorebug-logo"></img>
-        <p className='team-name'>{game.homeTeamName}</p>
+          <p>{game.awayTeamScore} - {game.homeTeamScore} </p>
         </div>
-        
-        {/* <h5>{game.awayTeamName} vs {game.homeTeamName}</h5> */}
-        
+        <div className="team-display">
+          <img alt="home team logo" src={`${IMG_SRC}${game.homeTeamID}.svg`} className="scorebug-logo"></img>
+          <p className='team-name'>{game.homeTeamName}</p>
+        </div>
       </div>
-
     </div>
     )}
 
     {selectedGame !== 0 && gameData && selectedGameData && (
       <Modal open={selectedGame !== 0}
-      onClose={ () => {setSelectedGame(0)}}>
+      onClose={ () => {
+		  setGameData(null);
+		  setSelectedGame(0);
+		  }}>
         <div className="modal card">
-          <p>{selectedGameData.awayTeamName} vs. {selectedGameData.homeTeamName}</p>
-          <p>{selectedGameData.awayTeamScore} - {selectedGameData.homeTeamScore}</p>
-          <p>Home Corsi: {getCorsiForPercent(gameData).home}%</p>
-          <p>Away Corsi: {getCorsiForPercent(gameData).away}%</p>
-          <p>Home PDO: {getPDO(gameData).home}</p>
-          <p>Away PDO: {getPDO(gameData).away}</p>
-          <ShotVisualizer data={gameData}/>
+			<div className="teams">
+				<div className="team-display">
+					<img alt="away team logo" src={`${IMG_SRC}${selectedGameData.awayTeamID}.svg`} className="scorebug-logo"></img>
+					<p className='team-name'>{selectedGameData.awayTeamName}</p>
+				</div>
+				<div className="score">
+					<p>{selectedGameData.awayTeamScore} - {selectedGameData.homeTeamScore} </p>
+				</div>
+				<div className="team-display">
+					<img alt="home team logo" src={`${IMG_SRC}${selectedGameData.homeTeamID}.svg`} className="scorebug-logo"></img>
+					<p className='team-name'>{selectedGameData.homeTeamName}</p>
+				</div>
+			</div>
+			<ShotVisualizer data={gameData}/>
+			<DataTable gameDetails={gameData} gameData={selectedGameData}/>
+			{/* <div className="stat-chart">
+				<div className="stat-chart-team">
+					<span>{getCorsiForPercent(gameData).away}%</span>
+					<span>{getPDO(gameData).away}</span>
+				</div>
+				<div className="stat-chart-labels">
+					<p>Corsi</p>
+					<p>PDO</p>
+				</div>
+				<div className="stat-chart-team">
+					<span>{getCorsiForPercent(gameData).home}%</span>
+					<span>{getPDO(gameData).home}</span>
+				</div>
+			</div> */}
+			{/* <p>Home Corsi: {getCorsiForPercent(gameData).home}%</p>
+			<p>Away Corsi: {getCorsiForPercent(gameData).away}%</p>
+			<p>Home PDO: {getPDO(gameData).home}</p>
+			<p>Away PDO: {getPDO(gameData).away}</p> */}
+
         </div>
       </Modal>
     )}

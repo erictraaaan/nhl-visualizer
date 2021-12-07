@@ -165,7 +165,12 @@ $violet: #b8b8ff;
       margin: 1rem;
     }
     p{
-      margin: 5px
+      margin: 5px;
+      font-size: 25px;
+
+      @include breakpoint(md){
+        font-size: 35px;
+      }
     }
   }
 
@@ -180,6 +185,24 @@ $violet: #b8b8ff;
     @include breakpoint(md){
       margin: auto;
       margin-top: 2rem;
+    }
+
+
+    .stat-chart {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      &-team{
+        margin: 1rem;
+      }
+
+      &-labels{
+        margin: 1rem;
+        margin-left: 2rem;
+        margin-right: 2rem;
+      }
     }
   }
 }
@@ -232,3 +255,5 @@ $violet: #b8b8ff;
     width: 100px;
   }
 }
+
+

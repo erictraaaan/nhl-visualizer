@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import React from 'react';
 import { useEffect, useRef } from 'react';
 import { IAPIGameDetails } from '../../util/types/APITypes';
+import './ShotVisualizer.scss';
 
 interface IShotVisualizerProps {
     data: IAPIGameDetails
@@ -17,30 +18,41 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
 	const RINK_HEIGHT = 168
 
     useEffect( () => {
-        console.log("initial load");
-        clearOldDrawing();
-        console.log("props: " , props);
+        // console.log("initial load");
+        // clearOldDrawing();
+        console.log("props: " , props.data);
         props.data != null && drawRink();
+
+        return() => {
+            console.log("component dismounting");
+        }
     }, []);
 
-    useEffect( () => {
-        console.log("prop changed");
-        clearOldDrawing();
-        console.log("props: " , props);
-        props.data != null && drawRink();
-    }, [props])
+    // useEffect( () => {
+    //     console.log("prop changed");
+    //     clearOldDrawing();
+    //     console.log("props: " , props);
+    //     props.data != null && drawRink();
+    // }, [props])
 
 	const clearOldDrawing = () => {
-		d3.select("svg").remove();
+		// d3.select('svg').remove();
 	}
 
     const drawRink = () => {
 
 		//define the initial SVG element
         let svg = d3.select(ref.current)
+            .append("div")
+            // Container class to make it responsive.
+            .classed("svg-container", true) 
             .append('svg')
-            .attr('width', RINK_WIDTH + 10)
-            .attr('height', RINK_HEIGHT + 10);
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", `0 0 ${RINK_WIDTH + 10} ${RINK_HEIGHT + 10}`)
+               // Class to make it responsive.
+            .classed("svg-content-responsive", true);
+            // .attr('width', RINK_WIDTH + 10)
+            // .attr('height', RINK_HEIGHT + 10);
 
 		//draw the centre ice line
 		drawVerticalLine(svg, 198,0,RINK_HEIGHT,'red');
@@ -208,7 +220,12 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
         }
 
     return (
-        <div className="shot-visualizer-div" ref={ref}/>
+        <div>
+            <h5>Goals & Shot Distribution</h5>  
+            <div className="shot-visualizer-div" ref={ref}/>
+
+        </div>
+
     )
 }
 
