@@ -118,3 +118,33 @@ $violet: #b8b8ff;
     // margin-top: 2rem;
   }
 }
+
+.day-selector {
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+
+    &-btn {
+      background-color: $brown;
+      height: 2rem;
+      margin: 1rem;
+
+      &.hide {
+        visibility: hidden;
+      }
+    }
+}
+
+.footer {
+  margin: 2rem;
+
+  p{
+    font-size: 14px;
+  }
+}
+
+.scorebug-logo {
+  height: 100px;
+  width: 100px;
+}

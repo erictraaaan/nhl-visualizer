@@ -17,8 +17,13 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
 	const RINK_HEIGHT = 168
 
     useEffect( () => {
+		clearOldDrawing();
         props.data != null && drawRink();
     }, []);
+
+	const clearOldDrawing = () => {
+		d3.select("svg").remove();
+	}
 
     const drawRink = () => {
 
@@ -105,7 +110,7 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
             }
         });
 
-		
+
         let colorScaleHome = generateColourScale(HOME_COLOUR);
         let colorScaleAway = generateColourScale(AWAY_COLOUR);
 

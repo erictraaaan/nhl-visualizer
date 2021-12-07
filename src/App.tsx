@@ -1,9 +1,9 @@
-import { Modal } from '@material-ui/core';
+import { Button, Modal } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import './App.scss';
 import { getCorsiForPercent, getPDO } from './util/AnalyticsUtils';
 import { getGameAPIData, getScoresAPIData }from './util/APIUtils';
-import { IAPIGameDetails, IAPIScoreResults } from './util/types/APITypes';
+import { IAPIGameDetails, IAPIGameScore, IAPIScoreResults } from './util/types/APITypes';
 import ShotVisualizer from './components/ShotVisualizer/ShotVisualizer';
 
 const App = () => {
@@ -14,13 +14,20 @@ const App = () => {
       setGameData(res);
     })
   }
-  
+  const CURRENT_DATE = new Date();
+  const WEEKDAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+  const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const IMG_SRC = "https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/";
+
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [currentGames, setCurrentGames] = useState<IAPIScoreResults|null>(null);
   const [selectedGame, setSelectedGame] = useState<number>(0);
+  const [selectedGameData, setSelectedGameData] = useState<IAPIGameScore|null>(null);
   const [gameData, setGameData] = useState<IAPIGameDetails|null>(null);
 
   const getScores = async () => {
-    await getScoresAPIData('2021-12-04')
+    const dateToString = selectedDate.toISOString().split('T')[0];
+    await getScoresAPIData(dateToString)
     .then( (res) => {
       setCurrentGames(res);
     })
@@ -36,27 +43,50 @@ const App = () => {
     getScores();
   }, [])
 
+  useEffect( () => {
+    getScores();
+  }, [selectedDate])
 
-
+  const handlePrevButtonClicked = () => {
+    const newDate = new Date(selectedDate.getTime() - 24*60*60*1000);
+    setSelectedDate(newDate);
+  }
+  const handleNextButtonClicked = () => {
+    const newDate = new Date(selectedDate.getTime() + 24*60*60*1000);
+    setSelectedDate(newDate);
+  }
 
   return (
     <div className="App">
     <h1>NHL Scoring Visualizer</h1>
     <p>Pick a game and see some interesting scoring stats.</p>
-    <p>Made using the public NHL API.</p>
+
+    <div className="day-selector">
+      <button className="day-selector-btn" onClick={handlePrevButtonClicked}>Previous Day</button>
+      <p>{`${WEEKDAYS[selectedDate.getDay()]}, ${MONTHS[selectedDate.getMonth()]} ${selectedDate.getDate()}`}</p>
+  
+      <button className={"day-selector-btn" + (selectedDate.setHours(0,0,0,0) == CURRENT_DATE.setHours(0,0,0,0) ? " hide" : "")}   onClick={handleNextButtonClicked}>Next Day</button>
+
+    </div>
 
     {currentGames && currentGames.games.map( (game, index) => 
-    <div key={index} className="card level-3" onClick={() => {setSelectedGame(game.gamePk)}}>
+    <div key={index} className="card level-3" onClick={() => {
+      setSelectedGameData(game);
+      setSelectedGame(game.gamePk);
+      }}>
+      <img src={`${IMG_SRC}${game.awayTeamID}.svg`} className="scorebug-logo"></img>
       <h5>{game.awayTeamName} vs {game.homeTeamName}</h5>
+      <img src={`${IMG_SRC}${game.homeTeamID}.svg`} className="scorebug-logo"></img>
       <p>{game.awayTeamScore} - {game.homeTeamScore} </p>
     </div>
     )}
 
-    {selectedGame !== 0 && gameData && (
+    {selectedGame !== 0 && gameData && selectedGameData && (
       <Modal open={selectedGame !== 0}
       onClose={ () => {setSelectedGame(0)}}>
-        <div className="modal card" >
-          <p>{gameData.gamePK}</p>
+        <div className="modal card">
+          <p>{selectedGameData.awayTeamName} vs. {selectedGameData.homeTeamName}</p>
+          <p>{selectedGameData.awayTeamScore} - {selectedGameData.homeTeamScore}</p>
           <p>Home Corsi: {getCorsiForPercent(gameData).home}%</p>
           <p>Away Corsi: {getCorsiForPercent(gameData).away}%</p>
           <p>Home PDO: {getPDO(gameData).home}</p>
@@ -65,6 +95,10 @@ const App = () => {
         </div>
       </Modal>
     )}
+
+    <div className="footer">
+      <p>Made by Eric Tran using public data available through the NHL API.</p>
+    </div>
   </div>
   );
 }
