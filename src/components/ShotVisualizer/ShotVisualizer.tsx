@@ -9,6 +9,7 @@ interface IShotVisualizerProps {
 
 const ShotVisualizer = (props: IShotVisualizerProps) => {
     const ref = useRef<HTMLDivElement>(null);
+	const VALID_SHOTS = ['SHOT', 'GOAL'];
 	const HOME_COLOUR = 'red';
 	const AWAY_COLOUR = 'blue';
 	//double the width and length of a regular hockey rink
@@ -29,6 +30,9 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
 
 		//draw the centre ice line
 		drawVerticalLine(svg, 198,0,RINK_HEIGHT,'red');
+
+		//draw centre ice circle
+		drawCircle(svg,200,84,30,'red');
 
 		//draw the goals
 		drawRectangle(svg,22.6,80,8,12,'blue');
@@ -93,7 +97,7 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
 		var heatArrayAway = generateHeatArray(0, 25, 0, 21);
 		var heatArrayHome = generateHeatArray(25, 50, 0, 21);
         props.data.allPlays.forEach( (play) => {
-            if (play.eventTypeID == 'SHOT') {
+            if (VALID_SHOTS.includes(play.eventTypeID)) {
                 const coords = rebaseCoordinate(play.coordinates);
 				addToHeatArray(
 					play.teamID == props.data.homeStats.id ? heatArrayHome : heatArrayAway,
@@ -101,7 +105,7 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
             }
         });
 
-
+		
         let colorScaleHome = generateColourScale(HOME_COLOUR);
         let colorScaleAway = generateColourScale(AWAY_COLOUR);
 
