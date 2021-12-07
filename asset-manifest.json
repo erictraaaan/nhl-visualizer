@@ -1,8 +1,8 @@
 {
   "files": {
-    "main.css": "/nhl-visualizer/static/css/main.7c30f667.chunk.css",
-    "main.js": "/nhl-visualizer/static/js/main.91a8e4ba.chunk.js",
-    "main.js.map": "/nhl-visualizer/static/js/main.91a8e4ba.chunk.js.map",
+    "main.css": "/nhl-visualizer/static/css/main.18784216.chunk.css",
+    "main.js": "/nhl-visualizer/static/js/main.c02f3f2b.chunk.js",
+    "main.js.map": "/nhl-visualizer/static/js/main.c02f3f2b.chunk.js.map",
     "runtime-main.js": "/nhl-visualizer/static/js/runtime-main.6ad60317.js",
     "runtime-main.js.map": "/nhl-visualizer/static/js/runtime-main.6ad60317.js.map",
     "static/js/2.c94b640d.chunk.js": "/nhl-visualizer/static/js/2.c94b640d.chunk.js",
@@ -10,13 +10,13 @@
     "static/js/3.a795e69d.chunk.js": "/nhl-visualizer/static/js/3.a795e69d.chunk.js",
     "static/js/3.a795e69d.chunk.js.map": "/nhl-visualizer/static/js/3.a795e69d.chunk.js.map",
     "index.html": "/nhl-visualizer/index.html",
-    "static/css/main.7c30f667.chunk.css.map": "/nhl-visualizer/static/css/main.7c30f667.chunk.css.map",
+    "static/css/main.18784216.chunk.css.map": "/nhl-visualizer/static/css/main.18784216.chunk.css.map",
     "static/js/2.c94b640d.chunk.js.LICENSE.txt": "/nhl-visualizer/static/js/2.c94b640d.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
     "static/js/runtime-main.6ad60317.js",
     "static/js/2.c94b640d.chunk.js",
-    "static/css/main.7c30f667.chunk.css",
-    "static/js/main.91a8e4ba.chunk.js"
+    "static/css/main.18784216.chunk.css",
+    "static/js/main.c02f3f2b.chunk.js"
   ]
 }
