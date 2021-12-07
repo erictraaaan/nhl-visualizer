@@ -116,7 +116,7 @@ const App = () => {
     )}
 
     <div className="footer">
-      <p>Made by Eric Tran using public data available through the NHL API.</p>
+      <p>Made by <a target="_blank" href="https://github.com/erictraaaan">Eric Tran</a> using public data available through the NHL API.</p>
     </div>
   </div>
   );
