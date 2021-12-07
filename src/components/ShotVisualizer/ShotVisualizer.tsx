@@ -17,9 +17,13 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
 	const RINK_HEIGHT = 168
 
     useEffect( () => {
-		clearOldDrawing();
         props.data != null && drawRink();
     }, []);
+
+    useEffect( () => {
+        clearOldDrawing();
+        props.data != null && drawRink();
+    }, [props])
 
 	const clearOldDrawing = () => {
 		d3.select("svg").remove();
