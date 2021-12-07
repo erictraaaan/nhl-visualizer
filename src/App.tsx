@@ -1,10 +1,10 @@
 import { Modal } from '@material-ui/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import './App.scss';
 import { getCorsiForPercent, getPDO } from './util/AnalyticsUtils';
 import { getGameAPIData, getScoresAPIData }from './util/APIUtils';
 import { IAPIGameDetails, IAPIScoreResults } from './util/types/APITypes';
-// import {getScores} from './util/ScorebugUtils';
+import ShotVisualizer from './components/ShotVisualizer/ShotVisualizer';
 
 const App = () => {
 
@@ -14,7 +14,7 @@ const App = () => {
       setGameData(res);
     })
   }
-
+  
   const [currentGames, setCurrentGames] = useState<IAPIScoreResults|null>(null);
   const [selectedGame, setSelectedGame] = useState<number>(0);
   const [gameData, setGameData] = useState<IAPIGameDetails|null>(null);
@@ -30,18 +30,17 @@ const App = () => {
     if (selectedGame !== 0){
       getGameData(selectedGame);
     }
-
   }, [selectedGame])
 
   useEffect( () => {
-    // getData();
     getScores();
   }, [])
 
+
+
+
   return (
     <div className="App">
-
-    {/* <header className="App-header"> */}
     <h1>NHL Scoring Visualizer</h1>
     <p>Pick a game and see some interesting scoring stats.</p>
     <p>Made using the public NHL API.</p>
@@ -62,17 +61,10 @@ const App = () => {
           <p>Away Corsi: {getCorsiForPercent(gameData).away}%</p>
           <p>Home PDO: {getPDO(gameData).home}</p>
           <p>Away PDO: {getPDO(gameData).away}</p>
+          <ShotVisualizer data={gameData}/>
         </div>
       </Modal>
     )}
-
-    {/* <div className="card level-3">
-      <h5>Floating Card</h5>
-    </div> */}
-    {/* <a> */}
-      {/* <div className="lets-go-btn">Let's go!</div> */}
-    {/* </a> */}
-    {/* </header> */}
   </div>
   );
 }

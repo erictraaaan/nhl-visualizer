@@ -110,8 +110,11 @@ $violet: #b8b8ff;
     margin: 15px;
 	}
 
-  .modal {
-    margin: auto;
-    margin-top: 2rem;
+  &.modal {
+    background-color: $beige;
+    // border: $brown;
+    margin: 2rem 2rem;
+    text-align: center;
+    // margin-top: 2rem;
   }
 }

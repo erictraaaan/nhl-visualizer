@@ -12,7 +12,6 @@ export const getScoresAPIData = async (date: string): Promise<IAPIScoreResults> 
         .then( (json) => {
             console.log("raw: ", json);
             if (json.data.dates && json.data.dates.length === 1){
-                console.log("in here")
                 var games: IAPIGameScore[] = [];
                 json.data.dates[0].games.forEach( (game : any) => {
                     const gamePk: number = game.gamePk;

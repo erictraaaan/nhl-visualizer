@@ -4,8 +4,8 @@ export const getShootingPercentage = (data: IAPIGameDetails): {home: number, awa
     const homePercentage = Math.round(data.homeStats.goals / data.homeStats.shots ) * 100;
     const awayPercentage = Math.round(data.awayStats.goals / data.awayStats.shots ) * 100;
     return {
-        home: homePercentage,
-        away: awayPercentage
+        home: Math.round(homePercentage * 100) / 100,
+        away: Math.round(awayPercentage * 100) / 100
     }
 }
 
@@ -37,8 +37,8 @@ export const getSavePercentage = (data: IAPIGameDetails): {home: number, away: n
     }
 
     return {
-        home: homeSavePercent, 
-        away: awaySavePercent
+        home: Math.round(homeSavePercent * 100) / 100, 
+        away: Math.round(awaySavePercent * 100) / 100
     }
 
     // if multiple goalies played, get the avg save percentage.
@@ -47,11 +47,12 @@ export const getSavePercentage = (data: IAPIGameDetails): {home: number, away: n
 export const getCorsiForPercent = (data: IAPIGameDetails): {home: number, away: number} => {
     const homeCF  = data.homeStats.shots + data.homeStats.missed + data.awayStats.blocks;
     const homeCA = data.awayStats.shots + data.awayStats.missed + data.homeStats.blocks;
-    const homeCorsiPercent = ( homeCF / (homeCF + homeCA ) ) * 100;
-
+    var homeCorsiPercent = ( homeCF / (homeCF + homeCA ) ) * 100;
+    homeCorsiPercent = Math.round( homeCorsiPercent * 100) / 100
+    const awayCorsiPercent = Math.round( (100 - homeCorsiPercent) * 100) / 100
     return {
-        home : homeCorsiPercent , 
-        away : (100 - homeCorsiPercent)
+        home : homeCorsiPercent, 
+        away : awayCorsiPercent
     }
 
 }
