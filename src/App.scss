@@ -97,7 +97,7 @@ $violet: #b8b8ff;
 
 .card {
 	background-color: #fff;
-	border-radius: 4px;
+	border-radius: 25px;
   min-width: 320px;
   @include breakpoint(md){
     min-width: 550px;

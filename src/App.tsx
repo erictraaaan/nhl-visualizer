@@ -6,6 +6,7 @@ import { getGameAPIData, getScoresAPIData }from './util/APIUtils';
 import { IAPIGameDetails, IAPIGameScore, IAPIScoreResults } from './util/types/APITypes';
 import ShotVisualizer from './components/ShotVisualizer/ShotVisualizer';
 import DataTable from './components/DataTable/DataTable';
+import Scorebug from './components/Scorebug/Scorebug';
 
 const App = () => {
 
@@ -57,10 +58,15 @@ const App = () => {
     setSelectedDate(newDate);
   }
 
+  const handleCardClicked = (game: IAPIGameScore) => {
+    setSelectedGameData(game);
+    setSelectedGame(game.gamePk);
+  }
+
   return (
     <div className="App">
     <h1>NHL Scoring Visualizer</h1>
-    <p>Pick a game and see some interesting scoring stats.</p>
+    <p>Pick a game to see some scoring stats.</p>
 
     <div className="day-selector">
       <div className="day-selector-btn" onClick={handlePrevButtonClicked}>Previous Day</div>
@@ -76,24 +82,11 @@ const App = () => {
     </div>
 
     {currentGames && currentGames.games.map( (game, index) => 
-    <div key={index} className="card level-3" onClick={() => {
-    setSelectedGameData(game);
-    setSelectedGame(game.gamePk);
-    }}>
-      <div className="teams">
-        <div className="team-display">
-          <img alt="away team logo" src={`${IMG_SRC}${game.awayTeamID}.svg`} className="scorebug-logo"></img>
-          <p className='team-name'>{game.awayTeamName}</p>
-        </div>
-        <div className="score">
-          <p>{game.awayTeamScore} - {game.homeTeamScore} </p>
-        </div>
-        <div className="team-display">
-          <img alt="home team logo" src={`${IMG_SRC}${game.homeTeamID}.svg`} className="scorebug-logo"></img>
-          <p className='team-name'>{game.homeTeamName}</p>
-        </div>
-      </div>
-    </div>
+	<Scorebug
+		game={game}
+		index={index}
+		cardClicked={handleCardClicked}
+	/>
     )}
 
     {selectedGame !== 0 && gameData && selectedGameData && (

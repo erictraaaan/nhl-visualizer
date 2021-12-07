@@ -23,7 +23,7 @@ const DataTable = (props : IDataTableProps) => {
         return {
             name : homeTeam ? props.gameData.homeTeamName : props.gameData.awayTeamName ,
             shots : homeTeam ? props.gameDetails.homeStats.shots : props.gameDetails.awayStats.shots ,
-            corsi : homeTeam ? corsi.home : corsi.away ,
+            corsi : (homeTeam ? corsi.home : corsi.away)  + "%",
             pdo : homeTeam ? pdo.home : pdo.away
         }
     }
@@ -37,13 +37,12 @@ const DataTable = (props : IDataTableProps) => {
     <div className="table-div">
     <h5>Advanced Stats</h5>  
     <TableContainer component={Paper}>
-      {/* <Table sx={{ minWidth: 650 }} aria-label="simple table"> */}
       <Table aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell align="center">Team</TableCell>
             <TableCell align="center">Shots</TableCell>
-            <TableCell align="center">Corsi</TableCell>
+            <TableCell align="center">Corsi For %</TableCell>
             <TableCell align="center">PDO</TableCell>
           </TableRow>
         </TableHead>
@@ -51,8 +50,7 @@ const DataTable = (props : IDataTableProps) => {
           {rows.map((row) => (
             <TableRow
               key={row.name}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-            >
+              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
               <TableCell align="center" component="th" scope="row">
                 {row.name}
               </TableCell>
