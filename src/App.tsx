@@ -15,12 +15,12 @@ const App = () => {
       setGameData(res);
     })
   }
-  const CURRENT_DATE = new Date();
+  const YESTERDAY = new Date(new Date().getTime() - 24*60*60*1000);
   const WEEKDAYS = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
   const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
   const IMG_SRC = "https://www-league.nhlstatic.com/images/logos/teams-current-primary-light/";
 
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(YESTERDAY);
   const [currentGames, setCurrentGames] = useState<IAPIScoreResults|null>(null);
   const [selectedGame, setSelectedGame] = useState<number>(0);
   const [selectedGameData, setSelectedGameData] = useState<IAPIGameScore|null>(null);
@@ -68,7 +68,7 @@ const App = () => {
           <p>{`${WEEKDAYS[selectedDate.getDay()]}, ${MONTHS[selectedDate.getMonth()]} ${selectedDate.getDate()}`}</p>
       </div>
 
-      <div className={"day-selector-btn" + (selectedDate.setHours(0,0,0,0) === CURRENT_DATE.setHours(0,0,0,0) ?
+      <div className={"day-selector-btn" + (selectedDate.setHours(0,0,0,0) === YESTERDAY.setHours(0,0,0,0) ?
        " hide" : "")}
         onClick={handleNextButtonClicked}>Next Day
         </div>
@@ -118,25 +118,6 @@ const App = () => {
 			</div>
 			<ShotVisualizer data={gameData}/>
 			<DataTable gameDetails={gameData} gameData={selectedGameData}/>
-			{/* <div className="stat-chart">
-				<div className="stat-chart-team">
-					<span>{getCorsiForPercent(gameData).away}%</span>
-					<span>{getPDO(gameData).away}</span>
-				</div>
-				<div className="stat-chart-labels">
-					<p>Corsi</p>
-					<p>PDO</p>
-				</div>
-				<div className="stat-chart-team">
-					<span>{getCorsiForPercent(gameData).home}%</span>
-					<span>{getPDO(gameData).home}</span>
-				</div>
-			</div> */}
-			{/* <p>Home Corsi: {getCorsiForPercent(gameData).home}%</p>
-			<p>Away Corsi: {getCorsiForPercent(gameData).away}%</p>
-			<p>Home PDO: {getPDO(gameData).home}</p>
-			<p>Away PDO: {getPDO(gameData).away}</p> */}
-
         </div>
       </Modal>
     )}
