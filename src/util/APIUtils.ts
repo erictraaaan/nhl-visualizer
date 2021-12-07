@@ -10,7 +10,6 @@ export const getScoresAPIData = async (date: string): Promise<IAPIScoreResults> 
 
         axios.get(apiCall)
         .then( (json) => {
-            console.log("raw: ", json);
             if (json.data.dates && json.data.dates.length === 1){
                 var games: IAPIGameScore[] = [];
                 json.data.dates[0].games.forEach( (game : any) => {
@@ -36,7 +35,6 @@ export const getScoresAPIData = async (date: string): Promise<IAPIScoreResults> 
                     date: date,
                     games: games
                 }
-                console.log("output: ", output);
                 return resolve(output);
             }
             else {
@@ -54,7 +52,6 @@ export const getGameAPIData = async (gamePK: number): Promise<IAPIGameDetails> =
         const apiCall = `https://statsapi.web.nhl.com/api/v1/game/${gamePK}/feed/live`;
         axios.get(apiCall)
         .then( (json) => {
-            console.log("raw: ", json);
             const scoringPlays: number[] = json.data.liveData.plays.scoringPlays;
             const periodPlays: IPeriodPlay[] = json.data.liveData.plays.playsByPeriod;
 
@@ -205,10 +202,7 @@ export const getGameAPIData = async (gamePK: number): Promise<IAPIGameDetails> =
                 homeStats: homeStats,
                 awayStats: awayStats
             }
-
-            // console.log("details before: " , details);
-            // details = prepCoordinates(details);
-            console.log("details: " , details);
+            
             return resolve(details);
         })
         .catch( () => {
@@ -216,20 +210,5 @@ export const getGameAPIData = async (gamePK: number): Promise<IAPIGameDetails> =
         })
     }) 
 }
-
-// const prepCoordinates = (data: IAPIGameDetails): IAPIGameDetails => {
-//     //flip the x and y coordinates of all events in the 2nd period
-//     const spStart = data.periodPlays[1].startIndex;
-//     const spEnd = data.periodPlays[1].endIndex;
-//     for (let i = 0 ; i< data.allPlays.length ; i++ ){
-//         if( spStart <= data.allPlays[i].eventIDx && data.allPlays[i].eventIDx <= spEnd ){
-//             console.log("data before: ", data.allPlays[i]);
-//             data.allPlays[i].coordinates.x = -data.allPlays[i].coordinates.x;
-//             data.allPlays[i].coordinates.y = -data.allPlays[i].coordinates.y;
-//             console.log("data after: " , data.allPlays[i]);
-//         }
-//     }
-//     return data;
-// }
 
 export default {getScoresAPIData, getGameAPIData}

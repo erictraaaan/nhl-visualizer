@@ -1,5 +1,5 @@
-import { Button, Modal } from '@material-ui/core';
-import React, { useEffect, useRef, useState } from 'react';
+import { Modal } from '@material-ui/core';
+import React, { useEffect, useState } from 'react';
 import './App.scss';
 import { getCorsiForPercent, getPDO } from './util/AnalyticsUtils';
 import { getGameAPIData, getScoresAPIData }from './util/APIUtils';
@@ -62,10 +62,15 @@ const App = () => {
     <p>Pick a game and see some interesting scoring stats.</p>
 
     <div className="day-selector">
-      <button className="day-selector-btn" onClick={handlePrevButtonClicked}>Previous Day</button>
-      <p>{`${WEEKDAYS[selectedDate.getDay()]}, ${MONTHS[selectedDate.getMonth()]} ${selectedDate.getDate()}`}</p>
-  
-      <button className={"day-selector-btn" + (selectedDate.setHours(0,0,0,0) == CURRENT_DATE.setHours(0,0,0,0) ? " hide" : "")}   onClick={handleNextButtonClicked}>Next Day</button>
+      <div className="day-selector-btn" onClick={handlePrevButtonClicked}>Previous Day</div>
+      <div className="date-display">
+          <p>{`${WEEKDAYS[selectedDate.getDay()]}, ${MONTHS[selectedDate.getMonth()]} ${selectedDate.getDate()}`}</p>
+      </div>
+
+      <div className={"day-selector-btn" + (selectedDate.setHours(0,0,0,0) === CURRENT_DATE.setHours(0,0,0,0) ?
+       " hide" : "")}
+        onClick={handleNextButtonClicked}>Next Day
+        </div>
 
     </div>
 
@@ -74,10 +79,24 @@ const App = () => {
       setSelectedGameData(game);
       setSelectedGame(game.gamePk);
       }}>
-      <img src={`${IMG_SRC}${game.awayTeamID}.svg`} className="scorebug-logo"></img>
-      <h5>{game.awayTeamName} vs {game.homeTeamName}</h5>
-      <img src={`${IMG_SRC}${game.homeTeamID}.svg`} className="scorebug-logo"></img>
-      <p>{game.awayTeamScore} - {game.homeTeamScore} </p>
+      <div className="teams">
+
+        <div className="team-display">
+        <img alt="away team logo" src={`${IMG_SRC}${game.awayTeamID}.svg`} className="scorebug-logo"></img>
+        <p className='team-name'>{game.awayTeamName}</p>
+        </div>
+        <div className="score">
+        <p>{game.awayTeamScore} - {game.homeTeamScore} </p>
+      </div>
+        <div className="team-display">
+        <img alt="home team logo" src={`${IMG_SRC}${game.homeTeamID}.svg`} className="scorebug-logo"></img>
+        <p className='team-name'>{game.homeTeamName}</p>
+        </div>
+        
+        {/* <h5>{game.awayTeamName} vs {game.homeTeamName}</h5> */}
+        
+      </div>
+
     </div>
     )}
 

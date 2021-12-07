@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import React, { useState } from 'react';
+import React from 'react';
 import { useEffect, useRef } from 'react';
 import { IAPIGameDetails } from '../../util/types/APITypes';
 
@@ -17,11 +17,16 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
 	const RINK_HEIGHT = 168
 
     useEffect( () => {
+        console.log("initial load");
+        clearOldDrawing();
+        console.log("props: " , props);
         props.data != null && drawRink();
     }, []);
 
     useEffect( () => {
+        console.log("prop changed");
         clearOldDrawing();
+        console.log("props: " , props);
         props.data != null && drawRink();
     }, [props])
 
@@ -69,7 +74,7 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
         props.data.scoringPlays.forEach( (goal) => {
             const scoringPlay = props.data.allPlays.find ( play => play.eventIDx === goal);
             if (scoringPlay != null && svg != null) {
-                const colour = scoringPlay.teamID == props.data.homeStats.id ? HOME_COLOUR : AWAY_COLOUR;
+                const colour = scoringPlay.teamID === props.data.homeStats.id ? HOME_COLOUR : AWAY_COLOUR;
                 const coord = rebaseCoordinate(scoringPlay.coordinates);
 				drawCircle(svg,coord.x,coord.y,2,colour, colour);
             }
@@ -109,7 +114,7 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
             if (VALID_SHOTS.includes(play.eventTypeID)) {
                 const coords = rebaseCoordinate(play.coordinates);
 				addToHeatArray(
-					play.teamID == props.data.homeStats.id ? heatArrayHome : heatArrayAway,
+					play.teamID === props.data.homeStats.id ? heatArrayHome : heatArrayAway,
 					coords);
             }
         });
@@ -145,7 +150,7 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
         const homeSide = props.data.homeStats.startingRinkSide;
 		coord.x = 2*coord.x;
 		coord.y = 2*coord.y;
-        if (homeSide == "right"){
+        if (homeSide === "right"){
             coord.x = - coord.x;
             coord.y = - coord.y;
         }

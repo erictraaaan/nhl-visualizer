@@ -13,7 +13,7 @@ export const getSavePercentage = (data: IAPIGameDetails): {home: number, away: n
     // if just one goalie played, use their save percentage for the teams' percentage.
     var homeSavePercent: number = 0;
     var awaySavePercent: number = 0;
-    if (data.homeStats.goalies.length == 1){
+    if (data.homeStats.goalies.length === 1){
         homeSavePercent = data.homeStats.goalies[0].savePercentage;
     }
     else {
@@ -25,7 +25,7 @@ export const getSavePercentage = (data: IAPIGameDetails): {home: number, away: n
         homeSavePercent = sum / data.homeStats.goalies.length ;
     }
 
-    if (data.awayStats.goalies.length == 1){
+    if (data.awayStats.goalies.length === 1){
         awaySavePercent = data.awayStats.goalies[0].savePercentage;
     }
     else {
