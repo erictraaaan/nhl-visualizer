@@ -1,11 +1,17 @@
 import * as d3 from 'd3';
 import React from 'react';
 import { useEffect, useRef } from 'react';
-import { IAPIGameDetails } from '../../util/types/APITypes';
+import { IAPIGameDetails, IAPIGameScore } from '../../util/types/APITypes';
 import './ShotVisualizer.scss';
+import Table from '@mui/material/Table';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
 
 interface IShotVisualizerProps {
     data: IAPIGameDetails
+    game: IAPIGameScore
 }
 
 const ShotVisualizer = (props: IShotVisualizerProps) => {
@@ -221,7 +227,17 @@ const ShotVisualizer = (props: IShotVisualizerProps) => {
 
     return (
         <div>
-            <h5>Goals & Shot Distribution</h5>  
+            <h5>Goals & Shot Locations</h5>  
+            <TableContainer>
+                <Table aria-label="simple table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell align="center">{props.game.awayTeamName}</TableCell>
+                            <TableCell align="center">{props.game.homeTeamName}</TableCell>
+                        </TableRow>
+                    </TableHead>
+                </Table>
+            </TableContainer>
             <div className="shot-visualizer-div" ref={ref}/>
 
         </div>

@@ -1,7 +1,6 @@
 import { Modal } from '@material-ui/core';
 import React, { useEffect, useState } from 'react';
 import './App.scss';
-import { getCorsiForPercent, getPDO } from './util/AnalyticsUtils';
 import { getGameAPIData, getScoresAPIData }from './util/APIUtils';
 import { IAPIGameDetails, IAPIGameScore, IAPIScoreResults } from './util/types/APITypes';
 import ShotVisualizer from './components/ShotVisualizer/ShotVisualizer';
@@ -99,17 +98,15 @@ const App = () => {
 			<div className="teams">
 				<div className="team-display">
 					<img alt="away team logo" src={`${IMG_SRC}${selectedGameData.awayTeamID}.svg`} className="scorebug-logo"></img>
-					<p className='team-name'>{selectedGameData.awayTeamName}</p>
 				</div>
 				<div className="score">
 					<p>{selectedGameData.awayTeamScore} - {selectedGameData.homeTeamScore} </p>
 				</div>
 				<div className="team-display">
 					<img alt="home team logo" src={`${IMG_SRC}${selectedGameData.homeTeamID}.svg`} className="scorebug-logo"></img>
-					<p className='team-name'>{selectedGameData.homeTeamName}</p>
 				</div>
 			</div>
-			<ShotVisualizer data={gameData}/>
+			<ShotVisualizer data={gameData} game={selectedGameData}/>
 			<DataTable gameDetails={gameData} gameData={selectedGameData}/>
         </div>
       </Modal>
