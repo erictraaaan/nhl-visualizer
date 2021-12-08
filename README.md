@@ -1,6 +1,6 @@
 # NHL Scoring Visualizer
 A simple tool to view data from past NHL games.
-Live demo available at [https://erictraaaan.github.io/nhl-visualizer/](https://erictraaaan.github.io/nhl-visualizer/)
+Live demo available [here](https://erictraaaan.github.io/nhl-visualizer/).
 
 ![Data](/img/data.png "Data")
 
