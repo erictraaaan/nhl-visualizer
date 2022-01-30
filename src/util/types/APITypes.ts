@@ -20,6 +20,8 @@ export interface IAPIGameDetails {
     scoringPlays: number[]
     periodPlays: IPeriodPlay[]
     allPlays: IPlay[]
+    faceoffPlays: IFaceoffPlay[]
+    penaltyPlays: IPenaltyPlay[]
 }
 
 export interface IPeriodPlay {
@@ -56,4 +58,16 @@ export interface IGoalie {
     saves: number
     shots: number
     savePercentage: number
+}
+
+export interface IPenaltyPlay {
+    teamID: number
+    period: number
+    periodTime: string
+}
+
+export interface IFaceoffPlay {
+    teamID: number
+    winnerID: number
+    winnerName: string
 }

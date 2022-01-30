@@ -6,6 +6,7 @@ import { IAPIGameDetails, IAPIGameScore, IAPIScoreResults } from './util/types/A
 import ShotVisualizer from './components/ShotVisualizer/ShotVisualizer';
 import DataTable from './components/DataTable/DataTable';
 import Scorebug from './components/Scorebug/Scorebug';
+import PenaltyChart from './components/PenaltyChart/PenaltyChart';
 
 const App = () => {
 
@@ -107,6 +108,7 @@ const App = () => {
 				</div>
 			</div>
 			<ShotVisualizer data={gameData} game={selectedGameData}/>
+      <PenaltyChart data={gameData} game={selectedGameData}/>
 			<DataTable gameDetails={gameData} gameData={selectedGameData}/>
         </div>
       </Modal>

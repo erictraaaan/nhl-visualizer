@@ -1,4 +1,4 @@
-import { IAPIGameDetails, IAPIGameScore, IAPIScoreResults, IGoalie, IPeriodPlay, IPlay, IPlayer, ITeamStats } from "./types/APITypes";
+import { IAPIGameDetails, IAPIGameScore, IAPIScoreResults, IFaceoffPlay, IGoalie, IPenaltyPlay, IPeriodPlay, IPlay, IPlayer, ITeamStats } from "./types/APITypes";
 import axios from "axios";
 
 const EVENT_IDS = ['GOAL','SHOT','MISSED_SHOT','BLOCKED_SHOT']
@@ -67,10 +67,42 @@ export const getGameAPIData = async (gamePK: number): Promise<IAPIGameDetails> =
             missedShots.home = 0;
             missedShots.away = 0;
 
+            const penaltyPlays: number[] = json.data.liveData.plays.penaltyPlays;
 
             var plays: IPlay[] = [];
+            var penaltyPlayArray: IPenaltyPlay[] = [];
+            var faceoffPlayArray: IFaceoffPlay[] = [];
+
             json.data.liveData.plays.allPlays.forEach( (play: any) => {
-                // console.log("play: ", play);
+
+
+                // check if penalty play.  if it is then add to the penalty play list
+                if (penaltyPlays.includes(play.about.eventIdx) && play.result.eventTypeId == 'PENALTY') {
+                    penaltyPlayArray.push( {
+                        teamID: play.team.id,
+                        period: play.about.period,
+                        periodTime: play.about.periodTime
+                    });
+                }
+
+                // check if it's a faceoff play. if it is then add to the faceoff list
+                if (play.result.eventTypeId == 'FACEOFF') {
+                    let players: any[] = play.players;
+                    var winnerID = play.players[0].player.id;
+                    var winnerName = play.players[0].player.fullName;
+                    players.forEach( (player) => {
+                        if (player.playerType == 'Winner'){
+                            winnerID = player.player.id;
+                            winnerName = player.player.fullName;
+                        }
+                    })
+                    faceoffPlayArray.push( {
+                        teamID: play.team.id,
+                        winnerID: winnerID,
+                        winnerName: winnerName
+                    });
+                }
+
                 if (EVENT_IDS.includes(play.result.eventTypeId) && play.about.eventIdx <= lastIndex){
 
                     const eventIDx = play.about.eventIdx;
@@ -78,17 +110,14 @@ export const getGameAPIData = async (gamePK: number): Promise<IAPIGameDetails> =
                     var coords;
                     //flip the coords if it's in the 2nd period
                     if ( spStartIndex <= eventIDx && eventIDx <= spEndIndex) {
-                        // console.log("event in 2nd.");
 
                         var x = parseInt(play.coordinates.x);
                         var y = parseInt(play.coordinates.y);
 
-                        // console.log("coords pre: " , { x, y} )
                         coords = {
                             x: - x,
                             y: - y
                         }
-                        // console.log("coords new: ", coords);
                     }
                     else {
                         coords = play.coordinates;
@@ -200,7 +229,9 @@ export const getGameAPIData = async (gamePK: number): Promise<IAPIGameDetails> =
                 periodPlays: periodPlays,
                 allPlays: plays,
                 homeStats: homeStats,
-                awayStats: awayStats
+                awayStats: awayStats,
+                faceoffPlays: faceoffPlayArray,
+                penaltyPlays: penaltyPlayArray
             }
             
             return resolve(details);
