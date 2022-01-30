@@ -27,6 +27,11 @@ const PenaltyChart = (props: IPenaltyChartProps) => {
     const prepData = (penaltyData: IPenaltyPlay[], homeID: number, awayID: number): D3PenaltyData[] => {
         var currentCount = 0;
         var output: D3PenaltyData[] = [];
+        output.push( {
+            x: "00:00",
+            y: 0,
+            time: d3.timeParse('%M:%S')("00:00")!
+        });
         penaltyData.forEach( (penalty) => {
             penalty.teamID == homeID? currentCount++ : currentCount--;
             var firstDigitAppend = (penalty.period-1)*2;
